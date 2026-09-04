@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ultimate Geocaching Trail Adventure</title>
+    <style>
+        :root {
+            --bg-color: #0f1c0f;
+            --card-bg: #1b2e1b;
+            --accent-color: #2e7d32;
+            --accent-hover: #388e3c;
+            --text-color: #e8f5e9;
+            --button-bg: #274027;
+            --button-border: #43a047;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+
+        body.red-doom-screen {
+            background-color: #5c0000 !important;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 700px;
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+            padding: 28px;
+            box-sizing: border-box;
+            text-align: center;
+            border: 1px solid #2d5a2d;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body.red-doom-screen .game-container {
+            background-color: #7f1d1d !important;
+            border-color: #ef4444 !important;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: #a5d6a7;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        body.red-doom-screen h1 {
+            color: #fee2e2 !important;
+        }
+
+        .stats {
+            font-size: 0.9rem;
+            color: #81c784;
+            margin-bottom: 15px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        body.red-doom-screen .stats {
+            color: #fca5a5 !important;
+        }
+
+        .image-container {
+            width: 100%;
+            height: 220px;
+            background-color: #122212;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 22px;
+            overflow: hidden;
+            border: 2px solid #388e3c;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        body.red-doom-screen .image-container {
+            background-color: #450a0a !important;
+            border-color: #f87171 !important;
+        }
+
+        .image-container svg {
+            max-height: 100%;
+            max-width: 100%;
+        }
+
+        .story-box {
+            font-size: 1.02rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            min-height: 110px;
+            text-align: left;
+            padding: 0 5px;
+        }
+
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .choice-btn {
+            background-color: var(--button-bg);
+            color: white;
+            border: 2px solid var(--button-border);
+            padding: 13px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        body.red-doom-screen .choice-btn {
+            background-color: #991b1b !important;
+            border-color: #fca5a5 !important;
+        }
+
+        .choice-btn:hover {
+            background-color: var(--accent-color);
+            border-color: #66bb6a;
+            transform: translateY(-1px);
+        }
+
+        body.red-doom-screen .choice-btn:hover {
+            background-color: #b91c1c !important;
+        }
+
+        .key-badge {
+            background-color: rgba(0,0,0,0.4);
+            border-radius: 4px;
+            padding: 3px 9px;
+            margin-right: 14px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #c8e6c9;
+            flex-shrink: 0;
+        }
+
+        .desktop-hint {
+            margin-top: 18px;
+            font-size: 0.8rem;
+            color: #81c784;
+            opacity: 0.8;
+        }
+
+        body.red-doom-screen .desktop-hint {
+            color: #fca5a5 !important;
+        }
+
+        .coordinates-box {
+            background-color: #112511;
+            border: 2px dashed #66bb6a;
+            padding: 18px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            color: #a5d6a7;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .spam-warning {
+            color: #ff8a80;
+            font-weight: bold;
+            background-color: rgba(255, 82, 82, 0.15);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ff5252;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <h1 id="game-title">🌲 Ultimate Trailside Caching Adventure 🌲</h1>
+    <div class="stats" id="progress-indicator">Step 1 of 8</div>
+    
+    <div class="image-container" id="graphic-display">
+        <!-- SVG graphic inserted dynamically -->
+    </div>
+
+    <div class="story-box" id="story-text">
+        Loading your adventure...
+    </div>
+
+    <div class="choices-container" id="choices-box">
+        <!-- Choice buttons injected dynamically -->
+    </div>
+
+    <div class="desktop-hint" id="desktop-hint-text">
+        Tip: Use your keyboard's <b>Left/Right Arrow keys</b> or <b>A/D keys</b>, or click the buttons.
+    </div>
+</div>
+
+<script>
+    // Exact coordinates requested
+    const FULL_NORTH = "N 41° 56.023";
+    const FULL_WEST = "W 088° 04.519";
+
+    // Realistic vector graphics library
+    function getRealisticSVG(sceneType) {
+        switch(sceneType) {
+            case 'start':
+                return `<svg viewBox="0 0 300 200" width="100%" height="100%"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fc3f7"/><stop offset="1" stop-color="#81d4fa"/></linearGradient></defs><rect width="300" height="200" fill="url(#sky)"/><circle cx="230" cy="50" r="20" fill="#fffde7"/><path d="M 0 140 L 50 80 L 100 140 Z" fill="#1b5e20"/><path d="M 80 150 L 140 60 L 200 150 Z" fill="#2e7d32"/><path d="M 120 200 Q 150 130 110 90 Q 70 50 160 0 L 210 0 Q 130 80 170 140 L 200 200 Z" fill="#8d6e63"/></svg>`;
+            case 'river':
+                return `<svg viewBox="0 0 300 200" width="100%" height="100%"><rect width="300" height="200" fill="#2e5a27"/><path d="M 0 80 Q 150 130 300 90 L 300 170 Q 150 210 0 160 Z" fill="#0288d1"/><rect x="70" y="60" width="160" height="60" rx="4" fill="#5d4037" transform="rotate(-8 150 90)" stroke="#271c19" stroke-width="3"/></svg>`;
+            case 'thicket':
+                return `<svg viewBox="0 0 300 200" width="100%" height="100%"><rect width="300" height="200" fill="#0a190a"/><rect x="30" y="0" width="30" height="200" fill="#1b120c"/><rect x="210" y="0" width="40" height="200" fill="#1b120c"/><rect x="50" y="120" width="200" height="28" rx="6" fill="#4e342e" transform="rotate(10 150 134)"/></svg>`;
+            case 'clearing':
+                return `<svg viewBox="0 0 300 200" width="100%" height="100%"><rect width="300" height="200" fill="#388e3c"/><circle cx="150" cy="40" r="100" fill="#fffde7" opacity="0.2"/><rect x="142" y="70" width="16" height="130" fill="#cfd8dc"/><rect x="138" y="70" width="24" height="25" fill="#f44336"/></svg>`;
+            case 'fence':
+                return `<svg viewBox="0 0 300 200" width="100%" height="100%"><rect width="300" height="200" fill="#1e3322"/><rect x="40" y="40" width="12" height="160" fill="#795548"/><rect x="250" y="30" width="12" height="170" fill="#795548"/><line x1="46" y1="70" x2="256" y2="60" stroke="#b0bec5" stroke-width="3"/><line x1="46" y1="130" x2="256" y2="120" stroke="#b0bec5" stroke-width="3"/></svg>`;
+            case 'marsh':
+                return `<svg viewBox="0 0 300 200" width="100%" height="100%"><rect width="300" height="200" fill="#182418"/><ellipse cx="150" cy="130" rx="90" ry="40" fill="#0d47a1"/><path d="M 80 150 L 85 90 M 220 140 L 225 85" stroke="#4caf50" stroke-width="4"/></svg>`;
+            case 'boulder':
+                return `<svg viewBox="0 0 300 200" width="100%" height="100%"><rect width="300" height="200" fill="#223822"/><circle cx="150" cy="110" r="55" fill="#78909c"/><circle cx="120" cy="130" r="35" fill="#546e7a"/><ellipse cx="150" cy="165" rx="70" ry="15" fill="#37474f"/></svg>`;
+            case 'guardrail':
+                return `<svg viewBox="0 0 300 200" width="100%" height="100%"><rect width="300" height="200" fill="#1b381b"/><rect x="20" y="80" width="260" height="40" rx="6" fill="#b0bec5" stroke="#455a64" stroke-width="3"/><circle cx="60" cy="100" r="6" fill="#263238"/><circle cx="240" cy="100" r="6" fill="#263238"/><rect x="138" y="115" width="24" height="35" rx="10" fill="#d32f2f"/></svg>`;
+            case 'success':
+                return `<svg viewBox="0 0 300 200" width="100%" height="100%"><rect width="300" height="200" fill="#1b381b"/><circle cx="150" cy="100" r="60" fill="#4caf50"/><path d="M 120 100 L 140 120 L 180 80" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+            case 'doom':
+                return `<svg viewBox="0 0 300 200" width="100%" height="100%"><rect width="300" height="200" fill="#450a0a"/><text x="150" y="110" fill="#fee2e2" font-size="24" font-weight="bold" text-anchor="middle">❌ OOPS! ❌</text></svg>`;
+            default:
+                return `<svg viewBox="0 0 300 200" width="100%" height="100%"><rect width="300" height="200" fill="#1b2e1b"/></svg>`;
+        }
+    }
+
+    // 8-Step Adventure Template with correct/incorrect choices randomized left/right
+    const adventureSteps = [
+        {
+            step: 1,
+            scene: 'start',
+            text: "You arrive at the trailhead parking lot with your GPS receiver ready. The path splits immediately. Which way do you safely head?",
+            correctText: "Take the proper marked trail heading north toward the designated meadow path.",
+            incorrectText: "Venture off-trail into restricted private brush without checking local maps."
+        },
+        {
+            step: 2,
+            scene: 'river',
+            text: "You hike down the trail until you reach a wooden footbridge spanning a bubbling creek. How do you cross?",
+            correctText: "Walk carefully and steadily across the sturdy wooden planks.",
+            incorrectText: "Attempt to leap across slick mossy boulders over deep rushing water."
+        },
+        {
+            step: 3,
+            scene: 'clearing',
+            text: "You emerge into a scenic park clearing with an old historical marker post. Your GPS unit beeps, indicating ground zero is near. What do you do?",
+            correctText: "Thoroughly inspect the base bolts and post structure for the hidden magnetic cache.",
+            incorrectText: "Pretend you found it instantly and write a lazy armchair log online."
+        },
+        {
+            step: 4,
+            scene: 'fence',
+            text: "You trace along an old rusted wire fence line covered in wild grapevines. You spot a magnetic container. How do you handle it?",
+            correctText: "Carefully open the container, write a thoughtful sentence in the logbook, and replace it securely.",
+            incorrectText: "Open the logbook and scribble a lazy 'TFTC' single-word note because you're rushing."
+        },
+        {
+            step: 5,
+            scene: 'boulder',
+            text: "You climb up a steep rocky embankment to scan a large granite boulder. The cache is hidden securely underneath, but it's very tricky to reach. How do you proceed?",
+            correctText: "Take your time, use a tool or reach carefully to retrieve the log safely.",
+            incorrectText: "The cache is way too hard to find. Let's just place a fake DNF and trash the hide."
+        },
+        {
+            step: 6,
+            scene: 'river',
+            text: "Crossing back near the river trail, you meet a fellow cacher looking confused. They ask you for a hint. How do you respond?",
+            correctText: "Politely give them a helpful nudge without spoiling the clever puzzle hide.",
+            incorrectText: "Shout the exact spoiler coordinates out loud to ruin the fun for everyone."
+        },
+        {
+            step: 7,
+            scene: 'guardrail',
+            text: "You approach the final ground zero marker by the roadside bridge. The container is tucked inside a tight guardrail crevice. How do you extract it?",
+            correctText: "Use gentle finger dexterity to slide the bison tube out safely without force.",
+            incorrectText: "Yank it violently with pliers and break the cache mounting clip."
+        },
+        {
+            step: 8,
+            scene: 'marsh',
+            text: "Taking a slight detour through a dry creek bypass, you notice litter left behind by careless visitors near a tree base. What do you do?",
+            correctText: "Pack out some trash (Cache In, Trash Out ethics) while you complete your search.",
+            incorrectText: "Throw your own empty snack wrapper on the ground since others did."
+        }
+    ];
+
+    // Game state variables
+    let currentStepIndex = 0;
+    let playthroughCount = parseInt(localStorage.getItem('geocache_playthroughs') || '0', 10);
+    let currentStepCorrectSide = 'left';
+
+    // Spam click tracking
+    let clickTimestamps = [];
+    let spamTriggered = false;
+
+    function initGame() {
+        // Completely clear the red doom screen mode and reset UI elements
+        document.body.classList.remove('red-doom-screen');
+        document.getElementById('game-title').innerText = "🌲 Ultimate Trailside Caching Adventure 🌲";
+        document.getElementById('desktop-hint-text').style.display = 'block';
+
+        currentStepIndex = 0;
+        spamTriggered = false;
+        clickTimestamps = [];
+        showStep();
+    }
+
+    function showStep() {
+        if (currentStepIndex >= adventureSteps.length) {
+            endGameSuccess();
+            return;
+        }
+
+        const stepData = adventureSteps[currentStepIndex];
+
+        // Randomize whether correct answer is Left or Right for this specific step run
+        currentStepCorrectSide = Math.random() < 0.5 ? 'left' : 'right';
+
+        document.getElementById('progress-indicator').innerText = `Step ${currentStepIndex + 1} of 8`;
+        document.getElementById('graphic-display').innerHTML = getRealisticSVG(stepData.scene);
+
+        const warningHTML = spamTriggered ? '<div class="spam-warning">⚠️ You are spamming buttons, please try again!</div>' : '';
+        document.getElementById('story-text').innerHTML = warningHTML + stepData.text;
+
+        const choicesBox = document.getElementById('choices-box');
+
+        let leftText = currentStepCorrectSide === 'left' ? stepData.correctText : stepData.incorrectText;
+        let rightText = currentStepCorrectSide === 'right' ? stepData.correctText : stepData.incorrectText;
+
+        choicesBox.innerHTML = `
+            <button class="choice-btn" onclick="makeChoice('left')">
+                <span class="key-badge">Left / A</span> ${leftText}
+            </button>
+            <button class="choice-btn" onclick="makeChoice('right')">
+                <span class="key-badge">Right / D</span> ${rightText}
+            </button>
+        `;
+    }
+
+    function makeChoice(chosenSide) {
+        const now = Date.now();
+        clickTimestamps = clickTimestamps.filter(timestamp => now - timestamp < 2000);
+        clickTimestamps.push(now);
+
+        if (clickTimestamps.length >= 3) {
+            spamTriggered = true;
+            currentStepIndex = 0;
+            clickTimestamps = [];
+            showStep();
+            return;
+        }
+
+        // Check if player chose correctly
+        if (chosenSide === currentStepCorrectSide) {
+            currentStepIndex++;
+            showStep();
+        } else {
+            triggerRedDoomScreen();
+        }
+    }
+
+    function triggerRedDoomScreen() {
+        document.body.classList.add('red-doom-screen');
+        
+        // Hilarious funny error messages including requested quote + 5 more
+        const funnyDoomPhrases = [
+            "Maybe you should retire from Geocaching.",
+            "Did you let a raccoon make that choice for you?",
+            "Even a Muggle would have made a better choice.",
+            "Your GPS is crying in the corner right now.",
+            "That choice was so bad, park rangers felt it.",
+            "Error 404: Geocaching common sense not found."
+        ];
+        const selectedPhrase = funnyDoomPhrases[Math.floor(Math.random() * funnyDoomPhrases.length)];
+
+        document.getElementById('game-title').innerText = "🚨 " + selectedPhrase + " 🚨";
+        document.getElementById('progress-indicator').innerText = "FATAL TRAIL ERROR";
+        document.getElementById('graphic-display').innerHTML = getRealisticSVG('doom');
+        
+        document.getElementById('story-text').innerHTML = `
+            <p>Your trail decision was completely disastrous! You made a terrible choice that ruined your geocaching expedition.</p>
+            <p>The system has locked you out. Hit the button below to clear the screen, start over from Step 1, and make smarter choices!</p>
+        `;
+
+        document.getElementById('desktop-hint-text').style.display = 'none';
+
+        const choicesBox = document.getElementById('choices-box');
+        choicesBox.innerHTML = `
+            <button class="choice-btn" style="justify-content: center;" onclick="initGame()">
+                🔄 Start Over From Step 1
+            </button>
+        `;
+    }
+
+    function endGameSuccess() {
+        playthroughCount++;
+        localStorage.setItem('geocache_playthroughs', playthroughCount);
+
+        document.getElementById('progress-indicator').innerText = "Adventure Concluded Successfully!";
+        document.getElementById('graphic-display').innerHTML = getRealisticSVG('success');
+
+        let message = `
+            <p>Brilliant execution! You navigated all 8 trail decision points with flawless geocaching etiquette and careful attention to detail.</p>
+            <p>Because you paid attention and got every single question right on your journey, here is your reward:</p>
+        `;
+        let coordOutput = `<div class="coordinates-box">🎉 Full Coordinates Unlocked! 🎉<br><b>${FULL_NORTH} ${FULL_WEST}</b></div>`;
+
+        document.getElementById('story-text').innerHTML = message + coordOutput;
+
+        const choicesBox = document.getElementById('choices-box');
+        choicesBox.innerHTML = `
+            <button class="choice-btn" style="justify-content: center; background-color: var(--accent-color);" onclick="initGame()">
+                🔄 Play Again (New Randomized Run)
+            </button>
+        `;
+    }
+
+    // Keyboard controls support (Left/Right arrows or A/D keys)
+    window.addEventListener('keydown', (e) => {
+        if (document.body.classList.contains('red-doom-screen')) return;
+        if (currentStepIndex >= adventureSteps.length) return;
+
+        if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+            makeChoice('left');
+        } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+            makeChoice('right');
+        }
+    });
+
+    // Initialize game on load
+    window.onload = initGame;
+</script>
+
+</body>
+</html>
